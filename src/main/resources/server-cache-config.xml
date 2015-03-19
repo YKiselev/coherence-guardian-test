@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<cache-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xmlns="http://xmlns.oracle.com/coherence/coherence-cache-config"
+              xsi:schemaLocation="http://xmlns.oracle.com/coherence/coherence-cache-config coherence-cache-config.xsd">
+
+    <caching-scheme-mapping>
+        <cache-mapping>
+            <cache-name>Cache-1</cache-name>
+            <scheme-name>near</scheme-name>
+        </cache-mapping>
+
+    </caching-scheme-mapping>
+
+    <caching-schemes>
+        <near-scheme>
+            <scheme-name>near</scheme-name>
+            <front-scheme>
+                <local-scheme>
+                    <scheme-name>LocalMemoryScheme</scheme-name>
+                </local-scheme>
+            </front-scheme>
+            <back-scheme>
+                <distributed-scheme>
+                    <scheme-ref>distributed-1</scheme-ref>
+                </distributed-scheme>
+            </back-scheme>
+        </near-scheme>
+
+        <distributed-scheme>
+            <scheme-name>distributed-1</scheme-name>
+            <service-name>DistributedBinaryCache</service-name>
+            <!--<serializer>-->
+                <!--<instance>-->
+                    <!--<class-name>com.tangosol.io.pof.ConfigurablePofContext</class-name>-->
+                    <!--<init-params>-->
+                        <!--<init-param>-->
+                            <!--<param-type>String</param-type>-->
+                            <!--<param-value>my-pof-config.xml</param-value>-->
+                        <!--</init-param>-->
+                    <!--</init-params>-->
+                <!--</instance>-->
+            <!--</serializer>-->
+            <thread-count>4</thread-count>
+            <task-hung-threshold>30000</task-hung-threshold>
+            <backing-map-scheme>
+                <read-write-backing-map-scheme>
+                    <internal-cache-scheme>
+                        <local-scheme>
+                            <high-units>50000000</high-units>
+                            <expiry-delay>30m</expiry-delay>
+                        </local-scheme>
+                    </internal-cache-scheme>
+                    <write-max-batch-size>1000</write-max-batch-size>
+                    <cachestore-scheme>
+                        <class-scheme>
+                            <class-name>org.uze.MyStore</class-name>
+                        </class-scheme>
+                    </cachestore-scheme>
+                    <read-only>false</read-only>
+                    <write-delay>5s</write-delay>
+                    <write-batch-factor>0.5</write-batch-factor>
+                    <write-requeue-threshold>5000</write-requeue-threshold>
+                </read-write-backing-map-scheme>
+            </backing-map-scheme>
+            <autostart>true</autostart>
+        </distributed-scheme>
+    </caching-schemes>
+
+</cache-config>
